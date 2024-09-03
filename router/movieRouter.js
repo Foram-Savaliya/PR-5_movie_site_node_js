@@ -1,5 +1,5 @@
 const express = require('express');
-const { ViewMovie, AddMovie, insertMovie, deleteMovie, editMovie, UpdateMovie } = require('../controller/movieController');
+const { View, Add, insert, Delete, Edit, Update } = require('../controller/movieController');
 
 const routes = express.Router();
 
@@ -19,13 +19,13 @@ const fileUpload = multer({storage : st}).single('image');
 
 
 
-routes.get('/',ViewMovie);
-routes.get('/add',AddMovie);
+routes.get('/',View);
+routes.get('/add',Add);
 
-routes.post('/insertMovie',fileUpload,insertMovie);
-routes.get('/deleteMovie',deleteMovie)
-routes.get('/editMovie',editMovie)
-routes.post('/UpdateMovie',fileUpload,UpdateMovie)
+routes.post('/insertMovie',fileUpload,insert);
+routes.get('/deleteMovie',Delete)
+routes.get('/editMovie',Edit)
+routes.post('/UpdateMovie',fileUpload,Update)
 
 
 

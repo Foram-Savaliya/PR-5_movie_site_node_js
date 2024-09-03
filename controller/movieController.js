@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const path = require('path')
 
-const ViewMovie = async(req,res) =>{
+const View = async(req,res) =>{
     try {
         const movies = await MovieModule.find();
          return res.render('viewMovie',{
@@ -13,20 +13,16 @@ const ViewMovie = async(req,res) =>{
         
     } catch (error) {
         console.log(error);
-        return false;
-        
+        return false;   
     }
-   
 }
 
-const AddMovie =(req,res) =>{
+const Add =(req,res) =>{
    return res.render('addMovie')
 }
-const insertMovie = async(req,res) =>{
+const insert = async(req,res) =>{
     try {
         const{name,description,price} = req.body;
-        // console.log(req.file);
-        // console.log(req.body);
         await MovieModule.create({
             name:name,
             description:description,
@@ -42,12 +38,11 @@ const insertMovie = async(req,res) =>{
     }
 }
 
-const deleteMovie = async(req,res) =>{
+const Delete = async(req,res) =>{
     try {
         const deid = req.query.deletId;
         let single = await MovieModule.findById(deid);
         fs.unlinkSync(single.image);
-        // console.log(deid);
         await MovieModule.findByIdAndDelete(deid)
         console.log("Deleted..");
         return res.redirect('/')
@@ -57,10 +52,9 @@ const deleteMovie = async(req,res) =>{
         
     }
 }
-const editMovie = async(req,res) =>{
+const Edit = async(req,res) =>{
     try {
         const eid = req.query.editId
-        // console.log(eid);
         const single = await MovieModule.findById(eid)
         return res.render('editMovie',{
             single
@@ -71,10 +65,9 @@ const editMovie = async(req,res) =>{
         return false
     }
 }
-const UpdateMovie = async(req,res) =>{
+const Update = async(req,res) =>{
     try {
         const{name,description,price,editid} = req.body;
-        // console.log(req.body);
         if(req.file){
             const single = await MovieModule.findById(editid);
             fs.unlinkSync(single.image);
@@ -84,21 +77,21 @@ const UpdateMovie = async(req,res) =>{
                         price:price,
                         image:req.file.path
 
-                    })
-                    console.log("Updated..");
-                        return res.redirect('/')
+            })
+            console.log("Updated..");
+            return res.redirect('/')
         }else{
             const single = await MovieModule.findById(editid);
             fs.unlinkSync(single.image);
             await MovieModule.findByIdAndUpdate(editid,{
-                        name:name,
-                        description:description,
-                        price:price,
-                        image:single.image
+                name:name,
+                description:description,
+                price:price,
+                image:single.image
 
-                    })
-                    console.log("Updated..");
-                        return res.redirect('/')
+            })
+            console.log("Updated..");
+            return res.redirect('/')
         }
         
     } catch (error) {
@@ -108,5 +101,5 @@ const UpdateMovie = async(req,res) =>{
     }
 }
 module.exports ={
-    ViewMovie,AddMovie,insertMovie,deleteMovie,editMovie,UpdateMovie
+    View,Add,insert,Delete,Edit,Update
 }
